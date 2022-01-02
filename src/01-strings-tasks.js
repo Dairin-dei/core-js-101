@@ -207,10 +207,10 @@ function extractEmails(str) {
 function getRectangleString(width, height) {
   let returnString = `┌${'─'.repeat(width - 2)}┐\n`;
 
-  for (let i = 1; i < height - 1; i + 1) {
+  for (let i = 1; i < height - 1; i += 1) {
     returnString += `│${' '.repeat(width - 2)}│\n`;
   }
-  returnString += `└${'─'.repeat(width - 2)}┘`;
+  returnString += `└${'─'.repeat(width - 2)}┘\n`;
   return returnString;
 }
 
@@ -232,17 +232,17 @@ function getRectangleString(width, height) {
  */
 function encodeToRot13(str) {
   function backSymbol(symbol) {
-    if ((symbol >= 'A' && symbol <= 'N') || (symbol >= 'a' && symbol <= 'n')) {
-      return String.fromCharCode(symbol + 13);
+    if ((symbol >= 'A' && symbol <= 'M') || (symbol >= 'a' && symbol <= 'm')) {
+      return String.fromCharCode(symbol.charCodeAt(0) + 13);
     }
-    if ((symbol >= 'O' && symbol <= 'Z') || (symbol >= 'o' && symbol <= 'z')) {
-      return String.fromCharCode(symbol - 13);
+    if ((symbol >= 'N' && symbol <= 'Z') || (symbol >= 'n' && symbol <= 'z')) {
+      return String.fromCharCode(symbol.charCodeAt(0) - 13);
     }
     return symbol;
   }
 
   let returnStr = '';
-  for (let i = 0; i < str.length; i + 1) {
+  for (let i = 0; i < str.length; i += 1) {
     returnStr += backSymbol(str[i]);
   }
   return returnStr;
@@ -262,7 +262,7 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  if (typeof value === 'string') {
+  if (typeof value === 'string' || value instanceof String) {
     return true;
   }
   return false;
@@ -293,7 +293,7 @@ function isString(value) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-  const str = "'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣','A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦','A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥','A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'";
+  const str = 'A♣,2♣,3♣,4♣,5♣,6♣,7♣,8♣,9♣,10♣,J♣,Q♣,K♣,A♦,2♦,3♦,4♦,5♦,6♦,7♦,8♦,9♦,10♦,J♦,Q♦,K♦,A♥,2♥,3♥,4♥,5♥,6♥,7♥,8♥,9♥,10♥,J♥,Q♥,K♥,A♠,2♠,3♠,4♠,5♠,6♠,7♠,8♠,9♠,10♠,J♠,Q♠,K♠';
   const strArr = str.split(',');
   return strArr.indexOf(value);
 }

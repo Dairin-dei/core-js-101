@@ -53,7 +53,7 @@ function generateOdds(len) {
  *    [] => []
  */
 function doubleArray(arr) {
-  return arr + arr;
+  return arr.concat(arr);
 }
 
 
@@ -269,13 +269,7 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-  const tempA = [];
-  arr.forEach((item, index) => {
-    for (let i = 1; i <= index + 1; i + 1) {
-      tempA.push(item);
-    }
-  });
-  return tempA;
+  return arr.map((item, index) => Array(index + 1).fill(item)).flat();
 }
 
 
@@ -311,7 +305,7 @@ function get3TopItems(arr) {
  *   [ 1, '2' ] => 1
  */
 function getPositivesCount(arr) {
-  return arr.filter((item) => item > 0).length;
+  return arr.filter((item) => typeof item === 'number' && item > 0).length;
 }
 
 /**
@@ -345,6 +339,9 @@ function sortDigitNamesByNumericOrder(arr) {
  *   [ 1, 10, 100, 1000 ]  => 1111
  */
 function getItemsSum(arr) {
+  if (arr.length === 0) {
+    return 0;
+  }
   return arr.reduce((sum, cur) => sum + cur);
 }
 
@@ -426,12 +423,18 @@ function toStringList(arr) {
  */
 function sortCitiesArray(arr) {
   return arr.sort((a, b) => {
-    if (a.country < b.country && a.city < b.city) return -1;
-    if (a.country > b.country && a.city > b.city) return 1;
-    if (a.country < b.country && a.city > b.city) return -1;
-    if (a.country > b.country && a.city < b.city) return 1;
-    if (a.country === b.country && a.city < b.city) return -1;
-    if (a.country === b.country && a.city > b.city) return 1;
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.country === b.country && a.city < b.city) {
+      return -1;
+    }
+    if (a.country === b.country && a.city > b.city) {
+      return 1;
+    }
     return 0;
   });
 }
@@ -523,23 +526,20 @@ function distinct(arr) {
 function group(array, keySelector, valueSelector) {
   const keys = Array.from(new Set(array.map(keySelector)));
   const values = array.map(valueSelector);
-  const retMap = new Map();
 
-  keys.forEach((itemK) => {
-    const temp = [];
-    array.forEach((itemV, index) => {
-      Object.keys(itemV).forEach((elemItemV) => {
-        if (itemV[elemItemV] === values[index]) {
-          const key1 = Object.keys(itemV).find((key0) => itemV[key0] === itemK);
-          if (itemV[key1] === itemK) {
-            temp.push(values[index]);
-          }
-        }
-      });
-    });
-    retMap.set(itemK, temp);
-  });
-  return retMap;
+  function fn(obj) {
+    return Object.values(obj);
+  }
+
+  function filterA(itemF, index, item) {
+    return itemF[0] === item && itemF[1] === values[index];
+  }
+
+  const a = array.map((item) => fn(item));
+
+  const b = keys.map((i) => [i, (a.filter((iF, id) => filterA(iF, id, i))).map((iM) => iM[1])]);
+
+  return new Map(b);
 }
 
 
@@ -573,14 +573,8 @@ function selectMany(arr, childrenSelector) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(arr, indexes) {
-  let curr;
-  let tempArr = arr;
-  for (let i = 0; i < indexes.length; i + 1) {
-    curr = tempArr[indexes[i]];
-    tempArr = curr;
-  }
-  return (curr);
+function getElementByIndexes(/* arr, indexes */) {
+  throw new Error('Not implemented');
 }
 
 
