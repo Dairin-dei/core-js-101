@@ -23,9 +23,7 @@
  *
  */
 function getComposition(f, g) {
-  return function (...args) {
-    return f(g(...args));
-  };
+  return (...args) => f(g(...args));
 }
 
 /**
@@ -45,9 +43,7 @@ function getComposition(f, g) {
  *
  */
 function getPowerFunction(exponent) {
-  return function (x) {
-    return x ** exponent;
-  };
+  return (x) => x ** exponent;
 }
 
 /**
@@ -66,18 +62,12 @@ function getPowerFunction(exponent) {
 function getPolynom(a, b, c) {
   if (a === undefined) return null;
   if (b === undefined) {
-    return function () {
-      return a;
-    };
+    return () => a;
   }
   if (c === undefined) {
-    return function (x) {
-      return a * x + b;
-    };
+    return (x) => a * x + b;
   }
-  return function (x) {
-    return a * x ** 2 + b * x + c;
-  };
+  return (x) => a * x ** 2 + b * x + c;
 }
 
 /**
@@ -167,7 +157,7 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
 function partialUsingArguments(fn, ...args1) {
-  return function (...args) {
+  return (...args) => {
     let result = '';
     const arrNew = args1.concat(args);
     if (fn instanceof Function) {
